@@ -3,44 +3,21 @@
 # Distribution.
 
 OS=`uname -s`
-REV=`uname -r`
-MACH=`uname -m`
+REV=`uname -o`
 
-GetVersionFromFile()
-{
-    VERSION=`cat $1 | tr "\n" ' ' | sed s/.*VERSION.*=\ // `
-}
 
-if [ "${OS}" = "SunOS" ] ; then
-    OS=Solaris
-    ARCH=`uname -p`
-    OSSTR="${OS} ${REV}(${ARCH} `uname -v`)"
-elif [ "${OS}" = "AIX" ] ; then
-    OSSTR="${OS} `oslevel` (`oslevel -r`)"
-elif [ "${OS}" = "Linux" ] ; then
-    KERNEL=`uname -r`
+if [ "${OS}" = "Linux" ] ; then
     if [ -f /etc/redhat-release ] ; then
-        DIST='RedHat'
-        PSUEDONAME=`cat /etc/redhat-release | sed s/.*\(// | sed s/\)//`
-        REV=`cat /etc/redhat-release | sed s/.*release\ // | sed s/\ .*//`
-    elif [ -f /etc/SuSE-release ] ; then
-        DIST=`cat /etc/SuSE-release | tr "\n" ' '| sed s/VERSION.*//`
-        REV=`cat /etc/SuSE-release | tr "\n" ' ' | sed s/.*=\ //`
-    elif [ -f /etc/mandrake-release ] ; then
-        DIST='Mandrake'
-        PSUEDONAME=`cat /etc/mandrake-release | sed s/.*\(// | sed s/\)//`
-        REV=`cat /etc/mandrake-release | sed s/.*release\ // | sed s/\ .*//`
-    elif [ -f /etc/debian_version ] ; then
-        DIST="Debian `cat /etc/debian_version`"
-        REV=""
-
-    fi
-    if [ -f /etc/UnitedLinux-release ] ; then
-        DIST="${DIST}[`cat /etc/UnitedLinux-release | tr "\n" ' ' | sed s/VERSION.*//`]"
-    fi
-
-    OSSTR="${OS} ${DIST} ${REV}(${PSUEDONAME} ${KERNEL} ${MACH})"
-
-fi
-
-echo ${OSSTR}
+        dnf check-update
+        dnf install zsh
+        sudo lchsh $USER
+    else
+        sudo apt update && sudo apt upgrade -y
+        sudo apt install -y zsh
+        echo "export SHELL=/bin/zsh" > ~/.bash_profile
+        echo "exec /bin/zsh -l" >> ~/.bash
+        sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
+        git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
+        git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+        
+        
