@@ -12,7 +12,6 @@ if [ "${OS}" = "Linux" ] ; then
         dnf install zsh
         sudo lchsh $USER
     else
-        sudo apt update && sudo apt upgrade -y
         sudo apt install -y zsh
         echo "export SHELL=/bin/zsh" > ~/.bash_profile
         echo "exec /bin/zsh -l" >> ~/.bash
