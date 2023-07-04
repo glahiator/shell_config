@@ -14,7 +14,7 @@ if [ "${OS}" = "Linux" ] ; then
     else
         sudo apt install -y zsh
         echo "export SHELL=/bin/zsh" > ~/.bash_profile
-        echo "exec /bin/zsh -l" >> ~/.bash
+        echo "exec /bin/zsh -l" >> ~/.bash_profile
         sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
         git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
         git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
